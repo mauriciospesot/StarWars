@@ -1,0 +1,84 @@
+<aura:component implements='flexipage:availableForRecordHome,force:hasRecordId' access='global' controller="starWarsCallout">
+    <aura:attribute name="searchText" type="String" default=""/>
+    <aura:attribute name="characterInfo" type="Object"/>
+    <aura:attribute name="searchIsReady" type="Boolean" default="false"/>
+    
+    <div style="width: 600px">
+        <lightning:card variant="Narrow" title="Search Star Wars character" iconName="standard:search">
+            <p class="slds-p-horizontal_small">
+                <lightning:input aura:id="searchCharacter" label="Search character"
+                                 name="searchCharacter"
+                                 value="{!v.searchText}"
+                                 placeholder="Buscar"/>
+                <lightning:button class="slds-m-top_x-small" variant="brand" label="Search" title="Search" onclick="{! c.handleClick }" />
+                
+                <aura:if isTrue="{!v.searchIsReady}">
+                    <div aria-labelledby="newexpenseform">
+                        <!-- BOXED AREA -->
+                        <fieldset class="slds-box slds-theme--default slds-container--small">
+                            <legend id="newexpenseform" class="slds-text-heading--small 
+                                                               slds-p-vertical--medium">
+                                Character info
+                            </legend>
+                            
+                            <!-- CREATE NEW EXPENSE FORM -->
+                            <form class="slds-form--stacked">  
+                                
+                                <lightning:input aura:id="expenseform" label="Nombre"
+                                                 name="expenseclient"
+                                                 value="{!v.characterInfo.name}"
+                                                 placeholder="ABC Co."/>
+                                
+                                <lightning:input aura:id="expenseform" label="Altura"
+                                                 name="expenseclient"
+                                                 value="{!v.characterInfo.height}"
+                                                 placeholder="ABC Co."/>
+                                
+                                <lightning:input aura:id="expenseform" label="Género"
+                                                 name="expenseclient"
+                                                 value="{!v.characterInfo.gender}"
+                                                 placeholder="ABC Co."/>
+                                
+                                <lightning:input aura:id="expenseform" label="Color de cabello"
+                                                 name="expenseclient"
+                                                 value="{!v.characterInfo.hair_color}"
+                                                 placeholder="ABC Co."/>
+                                
+                                <lightning:input aura:id="expenseform" label="Color de ojos"
+                                                 name="expenseclient"
+                                                 value="{!v.characterInfo.eye_color}"
+                                                 placeholder="ABC Co."/>
+                                
+                                <lightning:input aura:id="expenseform" label="URL"
+                                                 name="expenseclient"
+                                                 value="{!v.characterInfo.url}"
+                                                 placeholder="ABC Co."/>
+                                
+                                <lightning:input aura:id="expenseform" label="Planeta"
+                                                 name="expenseclient"
+                                                 value="{!v.characterInfo.homeworld}"
+                                                 placeholder="ABC Co."/>
+                                
+                                <lightning:input aura:id="expenseform" label="Número de personaje"
+                                                 name="expenseclient"
+                                                 value="{!v.searchText}"
+                                                 placeholder="ABC Co."/>
+                                
+                                <lightning:button class="slds-m-top_x-small" variant="brand" label="Add as contact" title="Add" onclick="{! c.handleClickAddContact }" />
+                                
+                            </form>
+                            <!-- / CREATE NEW EXPENSE FORM -->
+                            
+                        </fieldset>
+                        <!-- / BOXED AREA -->
+                    </div>
+                    
+                </aura:if> 
+            </p>
+        </lightning:card>
+    </div>
+    
+    
+    
+    
+</aura:component>
