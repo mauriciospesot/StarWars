@@ -1,6 +1,6 @@
 public class starWarsCallout {
     
-    @AuraEnabled
+     @AuraEnabled
     public static starWars getCharacter(String searchId) {
         Http http = new Http();
         HttpRequest request = new HttpRequest();
@@ -20,8 +20,11 @@ public class starWarsCallout {
     }
     
     @AuraEnabled
-    public static void addContact(Object character) {
-        
+    public static void addContact(Map<String, Object> character) {
+        Contact newCharacter = new Contact();
+        newCharacter.LastName = (String)character.get('name');
+        insert newCharacter;
+        system.debug(character);
     }
     
     public class starWars {
