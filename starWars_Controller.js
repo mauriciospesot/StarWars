@@ -1,8 +1,4 @@
 ({
-    doInit : function(component, event, helper) {
-        console.log('update2');
-    },
-    
     handleClick : function(component, event, helper) {
         var searchId = component.get('v.searchText');
         var action = component.get('c.getCharacter');
@@ -12,8 +8,19 @@
             var state = response.getState();
             if (state === 'SUCCESS') {
                 var characterInfo = response.getReturnValue();
-                component.set("v.characterInfo", characterInfo);
-                component.set("v.searchIsReady", true);
+                if(characterInfo.found) {
+                    component.set("v.characterInfo", characterInfo);
+                	component.set("v.searchIsReady", true);
+                } else {
+                    component.set("v.searchIsReady", false);
+                    var toastEvent = $A.get("e.force:showToast");
+                    toastEvent.setParams({
+                        "title": "The character was not found!",
+                        "type": "info",
+                        "message": "The id you entered may not be the right one."
+                    });
+                    toastEvent.fire();
+                }   
             }
         });
         
@@ -28,16 +35,26 @@
         action.setCallback(this, function(response) {
             var state = response.getState();
             if (state === 'SUCCESS') {
-                console.log('se creo un contacto');
                 
-                var toastEvent = $A.get("e.force:showToast");
-                toastEvent.setParams({
-                    "title": "Success!",
-                    "mode": 'sticky',
-                    "type": "success",
-                    "message": "The record has been created successfully."
-                });
-                toastEvent.fire();
+                if(response.getReturnValue()) {
+                    var toastEvent = $A.get("e.force:showToast");
+                    toastEvent.setParams({
+                        "title": "Success!",
+                        "mode": 'sticky',
+                        "type": "success",
+                        "message": "The record has been created successfully."
+                    });
+                    toastEvent.fire();
+                } else {
+                    var toastEvent = $A.get("e.force:showToast");
+                    toastEvent.setParams({
+                        "title": "Character already exist as a contact!",
+                        "mode": 'sticky',
+                        "type": "info",
+                        "message": "The record has not been created."
+                    });
+                    toastEvent.fire();
+                }
             } else {
                 console.log(state);
             }
