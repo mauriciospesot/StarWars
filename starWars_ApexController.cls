@@ -9,27 +9,38 @@ public class starWarsCallout {
         request.setMethod('GET');
         request.setHeader('Accept', 'application/json');
         HttpResponse response = http.send(request);
-        starWars info = new starWars();
+        starWars character = new starWars();
         // If the request is successful, parse the JSON response.
         if (response.getStatusCode() == 200) {
-            info = (starWars) System.JSON.deserialize(response.getBody(), starWars.class);
-          return info;
+            character = (starWars) System.JSON.deserialize(response.getBody(), starWars.class);
+            character.id = Integer.valueOf(searchId);
+            character.found = true;
+          return character;
         }
         
-        return info;
+        return character;
     }
     
     @AuraEnabled
-    public static void addContact(Map<String, Object> character) {
-        Contact newCharacter = new Contact();
-        newCharacter.LastName = (String)character.get('name');
-        insert newCharacter;
-        system.debug(character);
+    public static Boolean addContact(Map<String, Object> character) {
+        // Se valida si existe o no un registro de este personaje con su Id
+        if([SELECT Id FROM Contact WHERE Character_Id__c = :(Decimal)character.get('id')].isEmpty()) {
+            // Crear un objeto de tipo Contact 
+            Contact newCharacter = new Contact();
+        	newCharacter.LastName = (String)character.get('name');
+            newCharacter.Character_Id__c = (Decimal)character.get('id');
+            // Crear contacto
+        	insert newCharacter;
+            return true;
+        } 
+        return false;
     }
     
     public class starWars {
          @AuraEnabled
 		public String name;
+        @AuraEnabled
+		public Integer id;
          @AuraEnabled
 		public String height;
          @AuraEnabled
@@ -60,5 +71,7 @@ public class starWarsCallout {
         public String edited;
          @AuraEnabled
         public String url;
+        @AuraEnabled
+        public Boolean found = false;
 	}
 }
